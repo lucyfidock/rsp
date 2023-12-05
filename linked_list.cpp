@@ -17,8 +17,50 @@ void insertNode(listNode **head, int data) {
     *head = newNode;
 }
 
-void deleteNode(listNode **head, int data) {
-    
+listNode *findPredeccessor(listNode *head, listNode *value) {
+    if ((head == NULL) || (head->next == NULL)) {
+        return NULL;
+    }
+
+    if (head->next == value) {
+        return head;
+    } else {
+        return findPredeccessor(head->next, value);
+    }
+}
+
+void deleteNode(listNode **head, listNode **value) {
+    listNode * node = *head;
+    listNode * predeccessor = findPredeccessor(*head, *value); 
+
+    if (predeccessor == NULL) {
+        *head = node->next;
+    } else {
+        predeccessor->next = (*value)->next;
+    }
+    free(*value);
+}
+
+listNode * searchList(listNode *head, int data) {
+    if (head == NULL) {
+        return NULL;
+    }
+
+    if (head->nodeData == data) {
+        return head;
+    } else {
+        return searchList(head->next, data);
+    }
+}
+
+void printList(listNode *head) {
+    listNode* traverse = head;
+
+    while (traverse != NULL) {
+        std::cout << traverse->nodeData << " ";
+    traverse = traverse->next;
+    }
+    std::cout << std::endl;
 }
 
 int main() {
@@ -37,16 +79,10 @@ int main() {
     firstNode->next = secondNode;
     secondNode->next = thirdNode;
 
-    //print 
     head = firstNode;
-    while (head != NULL) {
-        std::cout << head->nodeData << " ";
-    head = head->next;
-    }
-    std::cout << std::endl;
 
-    //set back to first node 
-    head = firstNode;
+    //print 
+    printList(head);
 
     //INSERTION
     //insert new node 
@@ -55,15 +91,22 @@ int main() {
     insertNode(&head, 4);
 
     //print again
-    while (head != NULL) {
-        std::cout << head->nodeData << " ";
-    head = head->next;
-    }
+    printList(head);
 
-    //set back to first node 
-    head = firstNode;
+    //DELETION
+    deleteNode(&head, &secondNode);
 
-    //
+    //print again
+    printList(head);
+
+    //search list 
+    std::cout << searchList(head, 6) << std::endl;
+
+    listNode * node6 = searchList(head, 6);
+    deleteNode(&head, &node6);
+
+    //print again
+    printList(head);
 
 
 }
