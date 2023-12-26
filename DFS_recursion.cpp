@@ -66,6 +66,6 @@ int main() {
 
     cout << "\n DFS: " << endl;
 
-    DFS(&adjListGraph, 0);
+    DFS(&adjListGraph, 1);
 }
 
